@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -28,6 +28,25 @@ export default function Converter() {
   }, [numericAmount, rate]);
 
   const onKey = (k: any) => setAmount(prev => applyKey(prev, k));
+
+  // Debounce-persist conversions to history when amount changes
+  const historyTimer = useRef<any>(null);
+  const lastSaved = useRef<string>('');
+  useEffect(() => {
+    if (historyTimer.current) clearTimeout(historyTimer.current);
+    if (numericAmount > 0 && rate) {
+      historyTimer.current = setTimeout(() => {
+        const sig = `${fromCode}-${toCode}-${numericAmount}`;
+        if (sig === lastSaved.current) return;
+        lastSaved.current = sig;
+        addHistory({
+          from_code: fromCode, to_code: toCode,
+          amount: numericAmount, result: numericAmount * rate, rate,
+        }).catch(() => {});
+      }, 1200);
+    }
+    return () => historyTimer.current && clearTimeout(historyTimer.current);
+  }, [numericAmount, rate, fromCode, toCode]);
 
   const onUpdate = async () => {
     await refresh(true);
