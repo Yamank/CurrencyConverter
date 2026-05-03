@@ -1,0 +1,124 @@
+{
+  "theme_archetype": {
+    "primary": "Archetype 4 (Swiss & High-Contrast) mixed with Archetype 5 (Jewel & Luxury)",
+    "rationale": "For a premium fintech application, we want the authority and clarity of Swiss design combined with the high-end, cinematic feel of Jewel & Luxury. This ensures the app feels trustworthy yet modern and 'cool'.",
+    "theme_mode": "Both (Light and Dark with toggle)"
+  },
+  "typography": {
+    "font_family": {
+      "headings": "System's bold sans-serif (e.g. San Francisco on iOS, Roboto on Android) or Inter if using custom fonts. Must be geometric and clean.",
+      "body": "System's regular sans-serif (e.g. San Francisco, Roboto) or Inter.",
+      "mono": "Space Mono or System Mono for numbers/currency rates."
+    },
+    "scales": {
+      "h1_amount": "text-6xl sm:text-7xl font-bold tracking-tighter",
+      "h2_currency_code": "text-3xl font-semibold tracking-tight",
+      "h3_title": "text-xl sm:text-2xl font-semibold",
+      "body": "text-base",
+      "small_label": "text-xs font-medium uppercase tracking-[0.1em] text-muted-foreground",
+      "keypad_text": "text-3xl font-medium"
+    },
+    "rules": [
+      "No generic centering; left-align text where possible, center-align the main currency amount for dramatic focus.",
+      "Use tabular nums (font-variant-numeric: tabular-nums) for all currency displays to avoid horizontal shifting."
+    ]
+  },
+  "colors": {
+    "light": {
+      "background": "#F8F9FA",
+      "surface": "#FFFFFF",
+      "surface_glass": "rgba(255, 255, 255, 0.7)",
+      "text_primary": "#0A0A0A",
+      "text_secondary": "#64748B",
+      "border": "rgba(0, 0, 0, 0.05)",
+      "accent": "#0F172A",
+      "accent_vibrant": "#2563EB",
+      "success": "#10B981",
+      "danger": "#EF4444",
+      "chart_line": "#2563EB",
+      "chart_fill": "rgba(37, 99, 235, 0.1)"
+    },
+    "dark": {
+      "background": "#020617",
+      "surface": "#0F172A",
+      "surface_glass": "rgba(15, 23, 42, 0.6)",
+      "text_primary": "#F8FAFC",
+      "text_secondary": "#94A3B8",
+      "border": "rgba(255, 255, 255, 0.1)",
+      "accent": "#F8FAFC",
+      "accent_vibrant": "#3B82F6",
+      "success": "#10B981",
+      "danger": "#EF4444",
+      "chart_line": "#3B82F6",
+      "chart_fill": "rgba(59, 130, 246, 0.15)"
+    }
+  },
+  "layout_spacing": {
+    "base_padding": "p-6",
+    "card_radius": "rounded-3xl",
+    "button_radius": "rounded-2xl",
+    "keypad_gap": "gap-4",
+    "screen_padding": "px-6 pt-12 pb-8",
+    "rules": [
+      "Use extremely generous spacing (padding 6 or 8) around main converter cards to let the content breathe.",
+      "Containers must use soft inner shadows and very subtle borders (1px border-border) to define edges without heavy reliance on drop shadows."
+    ]
+  },
+  "components": {
+    "main_converter_screen": {
+      "layout": "Vertical Stack: Header (Menu/Theme toggle) -> Source Currency Card -> Switch Button -> Target Currency Card -> Exchange Rate Info -> Keypad.",
+      "source_card": "Large, transparent or glassmorphism block. Features country flag (rounded-full, 32x32), Currency Code (USD), and a massive text input/display for the amount.",
+      "target_card": "Similar to source but visually distinct (e.g., slightly dimmer text or different background tint) to denote the 'result' state.",
+      "switch_icon": "Absolute positioned circular button overlapping the boundary between source and target cards. Uses an up/down arrow icon.",
+      "exchange_rate_text": "Small, centered under the cards. Includes 'Updated DD-MM-YYYY' and a tiny 'sync' icon indicating offline/online status."
+    },
+    "custom_keypad": {
+      "structure": "Grid of 4 rows by 3 columns.",
+      "buttons": "Large touch targets. Numbers (0-9), Decimal (.), Backspace, and 'C' or 'CE'.",
+      "visuals": "No visible button borders by default; solid background on active press. Backspace and CE should use accent_vibrant color or muted text to differentiate from numbers.",
+      "interaction": "Visual haptic feedback (scale down to 0.95 and reduce opacity on press)."
+    },
+    "currency_picker_modal": {
+      "presentation": "Bottom sheet or full-screen modal with a sleek search bar at the top.",
+      "list_item": "Row containing Flag (squircle), Currency Code (bold), Country Name (muted), and a 'Pin' (star) icon on the far right.",
+      "pinned_section": "Show 'Favorites' at the top of the list."
+    },
+    "chart_panel": {
+      "usage": "Swipe left on a currency card or dedicated tab to view historical data.",
+      "visuals": "Minimalist line chart using react-native-chart-kit or victory-native. No grid lines, just the trend curve and an area gradient underneath. X-axis shows 7D, 1M toggle."
+    },
+    "multi_currency_comparison": {
+      "layout": "List view where the top is a sticky header showing the base amount (e.g., 100 USD), and below is a scrollable list of favorite currencies with their equivalent values."
+    }
+  },
+  "animations_and_interactions": {
+    "keypad_press": "Use React Native Reanimated or standard Animated for a snappy scale-down (to 0.95) and spring back on release.",
+    "theme_toggle": "Smooth crossfade of colors.",
+    "list_transitions": "Staggered entrance for the multi-currency list items.",
+    "haptics": "Trigger actual device haptics (Haptics.impactAsync) on keypad press and currency switch."
+  },
+  "media_urls": {
+    "flags": "Use a public API for flags like 'https://flagcdn.com/' appending the 2-letter country code (e.g., https://flagcdn.com/w80/us.png). Instruct main agent to map currency codes to country codes for flags."
+  },
+  "navigation_pattern": {
+    "recommendation": "Bottom Tab Navigation mixed with Stack.",
+    "tabs": [
+      { "name": "Converter", "icon": "calculator" },
+      { "name": "Compare", "icon": "list" },
+      { "name": "History/Charts", "icon": "trending-up" },
+      { "name": "Settings", "icon": "settings" }
+    ],
+    "modals": "Use Stack modals (presentation: 'modal') for the Currency Picker."
+  },
+  "instructions_to_main_agent": [
+    "This is an Expo React Native application. Use NativeWind (Tailwind for React Native) for styling to adhere to these Tailwind classes where possible, or translate them to React Native StyleSheet.",
+    "For icons, use @expo/vector-icons (Lucide or Feather).",
+    "Ensure the keypad is a custom component, do NOT use the native keyboard. Provide visual haptic feedback using TouchableOpacity or Pressable with animated scale.",
+    "For the UI, use a glassmorphism effect (blur view or translucent background) for the currency cards if the background has texture, otherwise use solid contrasting colors from the palette.",
+    "Integrate 'exchangerate.host' or 'open.er-api.com' for fetching rates.",
+    "Store favorites and cached rates locally using AsyncStorage.",
+    "Add test IDs (`testID` in React Native, not `data-testid`) to all interactive elements for testing.",
+    "Use standard tabular-nums for text showing currency values to prevent jittering during conversion.",
+    "Handle dark and light modes using NativeWind's color scheme hook or a custom React context."
+  ]
+}
